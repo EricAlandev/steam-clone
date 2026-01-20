@@ -1,0 +1,78 @@
+@layer components{
+
+    /* 
+        Componentes nav
+    */
+    .nav_titulos{
+        @apply   text-[25px] text-[#B0B0B0] border-b-[1px] border-[#A0A0A0];
+    }
+
+    .nav_subTitulos{
+        @apply  pt-2.5 pl-4 pb-2 text-[20px] text-[#B0B0B0];
+    }
+
+    /* 
+        Componentes login/cadastro
+    */
+
+    .login_Tittle{
+        @apply font-bold text-center text-white text-[28px];
+    }
+
+    .cadastro_Tittle{
+        @apply font-bold text-center text-white text-[25px];
+    }
+
+
+    .login_button{
+        @apply block mx-auto w-[60vw]  p-2.5  text-[white] bg-gradient-to-r from-[#06BFFF] to-[#2D75FF] rounded-md
+    }
+
+    .redireciona_cadastro_button{
+        @apply block mx-auto w-[50vw]  p-2 text-[white] bg-gradient-to-r from-[#06BFFF] to-[#2D75FF] rounded-md 
+        text-center
+    }
+
+
+    /*
+        Componentes jogos
+    */
+
+    .nomeJogo{
+        @apply pt-4 text-[22px] text-[white] 
+    }
+
+    .subCategoriasJogo{
+        @apply text-[gray]
+    }
+
+    .categoriasJogo{
+        @apply  max-h-[40px]  p-1.5 text-center text-[12.5px] text-[white] bg-[#12244B] rounded-md 
+    }
+
+    .categoriasJogoNaPage{
+        @apply  min-w-[60px] max-h-[40px]  px-3 py-1.5 text-center text-[15px] text-[white] bg-[#12244B] rounded-md 
+    }
+
+
+    .texto{
+        @apply text-[#D0D0D0]
+    }
+
+
+
+    /*precos */
+
+    .percentual{
+        @apply flex justify-center items-center w-[8vw] px-6.5 text-[18px] bg-[#A1CD44]
+    }
+
+    .preco{
+        @apply text-[white] text-[18px]
+    }
+
+    .preco_desconto{
+        @apply text-[gray] text-[17px] line-through
+    }
+
+}
