@@ -51,7 +51,7 @@ export async function FiltraJogos(body : pesquisaRequest){
 
         case "Lançamento":
             colunaParaOrdenar = "lancamento";
-            ordem = "ASC"
+            ordem = "DESC"
             break;
     }
 
@@ -151,8 +151,10 @@ export async function DetalheJogos({idNumber} : id){
         distribuidora: true,
         categoria: true,
         slides: true,
-        comentarios: true,
-        avaliacoes: true
+        comentarios: {
+            usuario: true
+        },
+        avaliacoes: true,
      }
     })
 
@@ -185,7 +187,7 @@ export async function DetalheJogos({idNumber} : id){
         
         categorias: DetalheJogos.categoria,
         slides: DetalheJogos.slides,
-        comentarios: DetalheJogos.comentarios
+        comentarios: DetalheJogos.comentarios,
       };
 }
 
@@ -202,7 +204,7 @@ type TypeBody = {
 
 export default async function AdicionarComentario({body}: TypeBody){
 
-    const {comentario , recomenda, idJogo} = body;
+    const {comentario , recomenda, idJogo, idUsuario} = body;
 
     console.log(comentario , recomenda, idJogo)
 
@@ -218,6 +220,10 @@ export default async function AdicionarComentario({body}: TypeBody){
         throw new Error("Sem jogo especificado")
     }
 
+    if (!idUsuario){
+        throw new Error("Usuário não logado")
+    }
+
     const AppDataSource = await getDataSource();
 
     const agora = new Date();
@@ -226,7 +232,8 @@ export default async function AdicionarComentario({body}: TypeBody){
         recomenda,
         comentario, 
         data_publicacao: agora,
-        jogos: {id: idJogo}
+        jogos: {id: idJogo},
+        usuario: {id: idUsuario}
     })
 
 

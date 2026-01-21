@@ -4,12 +4,10 @@ import { comentarios } from "@/servers/types/TypeJogos"
 
 
 type comentariosArray = {
-    nome: string,
-    foto_perfil: string,
     comentarios?: comentarios[]
 }
 
-export default function RenderizacaoComents({comentarios,nome, foto_perfil} : comentariosArray){
+export default function RenderizacaoComents({comentarios} : comentariosArray){
 
     return(
         <>
@@ -17,8 +15,7 @@ export default function RenderizacaoComents({comentarios,nome, foto_perfil} : co
 
             {comentarios?.map((coment) => (
                 <EsqComentario
-                    nome={nome}
-                    foto_perfil={foto_perfil}
+                    usuario={coment.usuario}
                     recomenda={coment.recomenda}
                     data_publicacao={coment.data_publicacao}
                     comentario={coment.comentario}

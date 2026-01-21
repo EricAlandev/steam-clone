@@ -1,5 +1,6 @@
 // /entity/Usuario.ts
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn } from "typeorm";
+import type { Comentarios } from "./EntityComentarios";
 
 @Entity("usuarios") // nome da tabela no banco
 export class Usuario {
@@ -14,4 +15,7 @@ export class Usuario {
 
     @Column()
     foto_perfil!: string;
+
+    @OneToMany("Comentarios", (comentario:any) => comentario.usuario)
+    comentario!: Comentarios;
 }

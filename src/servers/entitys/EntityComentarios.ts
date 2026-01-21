@@ -2,6 +2,7 @@
 // /entity/Usuario.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
 import type { Jogos } from "./EntityJogos";
+import type { Usuario } from "./EntityUsers";
 
 @Entity("comentarios") // nome da tabela no banco
 export class Comentarios {
@@ -20,4 +21,8 @@ export class Comentarios {
     @ManyToOne("Jogos", (jogo:any) => jogo.comentarios)
     @JoinColumn({name: "jogo_id"})
     jogos!: Jogos;
+
+    @ManyToOne("Usuario", (usuario:any) => usuario.comentario)
+    @JoinColumn({name: "id_user"})
+    usuario!: Usuario;
 }

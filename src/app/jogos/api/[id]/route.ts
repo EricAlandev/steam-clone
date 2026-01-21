@@ -10,9 +10,6 @@ export async function GET(req: Request, {params} : {params: {id:string}} ){
     try{
         const {id} = await params;
         const idNumber = parseInt(id);
-
-        console.log(id);
-        console.log(idNumber);
         
         //verifica se houve problema na conversão.
         if (!id || isNaN(idNumber)){

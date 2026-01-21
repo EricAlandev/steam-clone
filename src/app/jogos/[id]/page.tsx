@@ -77,7 +77,8 @@ const [detalhes, setDetalhes] = useState<jogos>();
                 body: JSON.stringify({
                   comentario: comentario.comentario,
                   recomenda: comentario.gostou,
-                  idJogo: id
+                  idJogo: id,
+                  idUsuario: usuario?.id
                 })
             })
 
@@ -140,8 +141,6 @@ const [detalhes, setDetalhes] = useState<jogos>();
 
                {/*Array de comentários*/}
                <RenderizacaoComents
-                nome={usuario?.email}
-                foto_perfil={usuario?.foto_perfil}
                 comentarios={detalhes?.comentarios}
                />
             </div>

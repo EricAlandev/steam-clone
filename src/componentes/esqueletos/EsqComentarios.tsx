@@ -3,8 +3,7 @@ import { comentarios } from "@/servers/types/TypeJogos"
 
 
 export default function EsqComentario({
-    nome,
-    foto_perfil,
+    usuario,
     recomenda,
     data_publicacao,
     comentario
@@ -25,7 +24,7 @@ export default function EsqComentario({
 
                 {/*Foto perfil */}
                 <img
-                src={foto_perfil}
+                src={usuario?.foto_perfil}
                 alt=""
                 className="min-w-[11vw] max-w-[11vw]                
                             min-h-[11vw] max-h-[11vw] rounded-md
@@ -33,7 +32,7 @@ export default function EsqComentario({
                 />
                 
                 {/*Nome */}
-                <p className="text-[white]">{nome}</p>
+                <p className="text-[white]">{usuario?.email}</p>
             </div>
 
             {/*Recomendação. */}
