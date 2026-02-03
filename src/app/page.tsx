@@ -1,31 +1,39 @@
+'use client'
+
 import Layout from "@/componentes/layout/Layout";
 import JogosDestaques from "@/componentes/pages/homePage/destaques/JogosDestaque";
+import { useEffect, useState } from "react";
 
 
-export  default async function Home() {
+export  default function Home() {
 
-
-  
-    let jogosDestaques;
+    const [stateJogosDestaque, setStateJogosDestaque] = useState();
 
      //puxar os jogos em destaque
-    try{
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/jogos/api`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      })
+    const puxarJogos = async() => {
+      try{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/jogos/api`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+  
+        const retorno = await response.json();
 
-      jogosDestaques = await response.json();
-
-      console.log("PUXOU TUDO ")
-      console.log(jogosDestaques)
+        console.log(retorno);
+  
+        setStateJogosDestaque(retorno);
+      }
+  
+      catch(error){
+        console.log(error)
+      }
     }
 
-    catch(error){
-      console.log(error)
-    }
+    useEffect(() => {
+      puxarJogos();
+    }, [])
 
 
   return (
@@ -38,7 +46,7 @@ export  default async function Home() {
           {/*Jogos em Destaque */}
           <div className="pt-10 ">
             <JogosDestaques
-              jogos={jogosDestaques}
+              jogos={stateJogosDestaque}
             />
           </div>
         </div>

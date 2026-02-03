@@ -195,7 +195,8 @@ export async function DetalheJogos({idNumber} : id){
 type body = {
     recomenda?: boolean,
     comentario?: string, 
-    idJogo?: number
+    idJogo?: number,
+    idUsuario?: string
 }
 
 type TypeBody = {

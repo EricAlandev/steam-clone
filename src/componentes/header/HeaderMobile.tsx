@@ -13,11 +13,21 @@ export type pesquisa = {
 
 export default function HeaderMobile(){
 
-    const {usuario} = dadosGlobais()!;
-    const router = useRouter();
-
     //armazena a pesquisa do usuário
     const [pesquisa, setPesquisa] = useState<pesquisa>({valorPesquisa: ""});
+
+    //renderiza o menu
+    const [droperMenu, setDroperMenu] = useState(false);
+
+    //define o tipo de droper já dentro do menu
+    const [tipoDroper, setTipoDroper] = useState("");
+
+    //define os tipos permitidos
+    type TipoDroper = "loja" | "comunidade"
+
+
+    const {usuario, logOut} = dadosGlobais()!;
+    const router = useRouter();
 
     //pega valor do Objeto;
     const alteraValor = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,15 +38,6 @@ export default function HeaderMobile(){
                 }
             ))
     }
-    
-    //renderiza o menu
-    const [droperMenu, setDroperMenu] = useState(false);
-
-    //define o tipo de droper já dentro do menu
-    const [tipoDroper, setTipoDroper] = useState("");
-
-    //define os tipos permitidos
-    type TipoDroper = "loja" | "comunidade"
 
     //function que determina qual o droper e se já pode fechar ao clicar de novo
     const droper = async (valor: TipoDroper) => {
@@ -98,7 +99,7 @@ export default function HeaderMobile(){
                                     {/*Define se o user tá logado ou não */}
                                     {usuario ? (
                                         <>
-                                        {/*Usuário não logado */}
+                                        {/*Usuário logado */}
                                         <li className="nav_titulos pt-4 pl-4 pb-4">
                                             <div className="flex items-center gap-2">
                                                 {/*Foto Perfil */}
@@ -111,7 +112,7 @@ export default function HeaderMobile(){
                                                 />
 
                                                 <Link
-                                                    href={"/"}
+                                                    href={`/usuario/${usuario?.id}`}
                                                 >
                                                     <p className="text-[16px]">
                                                         Olá!
@@ -168,8 +169,9 @@ export default function HeaderMobile(){
                                                     Início
                                                 </Link>
     
-                                                <li className="nav_subTitulos">Fila de Descoberta</li>
-                                                <li className="nav_subTitulos">Lista de Desejos</li>
+                                                <Link href={`/usuario/${usuario?.id}/carrinho`}>
+                                                    <li className="nav_subTitulos">Carrinho</li>
+                                                </Link>
                                                 <li className="nav_subTitulos">Loja de Pontos</li>
                                                 <li className="nav_subTitulos">Notícias</li>
                                                 <li className="nav_subTitulos">Estatísticas</li>
@@ -197,7 +199,8 @@ export default function HeaderMobile(){
                                         {/*opções do droper de comunidade*/}
                                         {tipoDroper === "comunidade" && (
                                             <ul className="flex flex-col bg-[#30353F]">
-                                                <li className="nav_subTitulos">Início</li>
+                                                <Link 
+                                                 href="/usuario/pesquisa" className="nav_subTitulos">Usuários</Link>
                                                 <li className="nav_subTitulos">Início</li>
                                                 <li className="nav_subTitulos">Início</li>
                                                 <li className="nav_subTitulos">Início</li>
@@ -213,8 +216,10 @@ export default function HeaderMobile(){
                                     </li>
     
                                     {/*Apoio */}
-                                    <li className="nav_titulos pt-4 pl-4 pb-4">
-                                        Apoio
+                                    <li 
+                                    onClick={async () => await logOut()}
+                                    className="nav_titulos pt-4 pl-4 pb-4">
+                                        Sair
                                     </li>
                                 </ul>
                             </nav>

@@ -38,5 +38,5 @@ export type jogos = {
 
 //Type para receber esses objetos em forma de array
 export type ObjetoJogos = {
-    jogos: jogos[]
+    jogos?: jogos[]
 }

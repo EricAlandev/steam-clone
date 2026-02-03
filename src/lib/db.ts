@@ -10,15 +10,16 @@ import { SlidesJogos } from "@/servers/entitys/EntitySlidesJogos";
 import { Comentarios } from "@/servers/entitys/EntityComentarios";
 import { Avaliacoes } from "@/servers/entitys/EntityAvaliacoes";
 import WorkerAvaliacao from "@/servers/Workers/WorkerAvaliacao";
+import { Carrinho } from "@/servers/entitys/carrinho/EntityCarrinho";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.NEXT_PUBLIC_DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes],
+  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho],
   migrations: [],
-  subscribers: []
+  subscribers: [] 
 });
 
 export async function getDataSource() {

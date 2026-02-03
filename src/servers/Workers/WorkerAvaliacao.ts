@@ -3,7 +3,6 @@ import cron from 'node-cron';
 import { getDataSource } from '@/lib/db';
 import { Jogos } from '../entitys/EntityJogos';
 import { Avaliacoes } from '../entitys/EntityAvaliacoes';
-import EnvioPeloBackEnd from '../websockets/WebSocket';
 
 
 // Gerenciar em tempo real as avaliações do usuário;
@@ -111,9 +110,6 @@ export default async function WorkerAvaliacao(){
 
                 await AppDataSource.getRepository(Avaliacoes).save(armazenaNotificacoes)
               }
-            
-              //ao atualizar os dados, envia para o websocket;
-              await EnvioPeloBackEnd("Atualização de avaliações" , jogoAtual.id)
           }
       
           else {

@@ -16,10 +16,12 @@ export type LoginIdentificador = {
 
 export default function PageLogin() {
 
+    const router = useRouter();
+
     //context login
     const {login} = dadosGlobais()!;
 
-    const router = useRouter();
+
     
 
     const LoginUser = async (dados: Dado) => {

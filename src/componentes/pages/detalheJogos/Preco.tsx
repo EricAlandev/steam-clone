@@ -1,11 +1,17 @@
 import { jogos } from "@/servers/types/TypeJogos";
 
+type levarAoCarrinho = jogos & {
+    adicionarAoCarrinho?: () => void
+}
 
 export default function Preco({
     nome, 
     preco, 
     preco_desconto, 
-    percentual} : jogos){
+    percentual,
+    adicionarAoCarrinho
+} : levarAoCarrinho)
+    {
 
 
     return(
@@ -39,7 +45,9 @@ export default function Preco({
 
                             {/*Carrinho */}
                             <div>
-                                <p className="flex items-center h-[4.6vh] p-2 font-medium text-[white] bg-[#6BA721]">
+                                <p className="flex items-center h-[4.6vh] p-2 font-medium text-[white] bg-[#6BA721]"
+                                onClick={() => adicionarAoCarrinho()}
+                                >
                                     + Carrinho
                                 </p>
                             </div>

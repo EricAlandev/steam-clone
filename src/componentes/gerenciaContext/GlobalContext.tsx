@@ -2,33 +2,29 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-// tipos básicos (opcional, mas correto)
 type GlobalContextType = {
   usuario: any | null;
   token: string | null;
   login: (usuario: any, token: string) => void;
+  loading: boolean,
   logOut: () => void;
 };
 
-//tipo do children que é um componente react
 type Children = {
     children: React.ReactNode
 }
 
-// cria o contexto
 const GlobalContext = createContext<GlobalContextType | null>(null);
 
-// provider
 export default function GlobalContextProvider({ children }: Children) {
   const [usuario, setUsuario] = useState<any>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [montado, setMontado] = useState(false); 
 
-
-  // função de login
   const login = (usuarioDados: any, tokenDados: string) => {
     setUsuario(usuarioDados);
     setToken(tokenDados);
-
     localStorage.setItem("usuario", JSON.stringify(usuarioDados));
     localStorage.setItem("token", JSON.stringify(tokenDados));
   };
@@ -40,28 +36,44 @@ export default function GlobalContextProvider({ children }: Children) {
     setToken(null);
   }
 
-  // carregar do localStorage
   useEffect(() => {
-    const localStorageUser = localStorage.getItem("usuario");
-    if (localStorageUser) {
-      const usuarioParseado = JSON.parse(localStorageUser);
-      setUsuario(usuarioParseado);
+    const ParsearValores = () => {
+      try {
+        const localStorageUser = localStorage.getItem("usuario");
+        const localStorageToken = localStorage.getItem("token");
+
+        if (localStorageUser && localStorageUser !== "undefined") {
+          setUsuario(JSON.parse(localStorageUser));
+        }
+        if (localStorageToken && localStorageToken !== "undefined") {
+          setToken(JSON.parse(localStorageToken));
+        }
+      } catch (e) {
+        console.error("Erro ao ler localStorage", e);
+      } finally {
+        setLoading(false);
+        setMontado(true);
+      }
     }
 
-    const localStorageToken = localStorage.getItem("token");
-    if (localStorageToken) {
-      const tokenParseado = JSON.parse(localStorageToken);
-      setToken(tokenParseado);
-    }
+    ParsearValores();
   }, []);
 
   return (
-    <GlobalContext.Provider value={{ usuario, token, login, logOut  }}>
-      {children}
+    <GlobalContext.Provider value={{ usuario, token, login, logOut, loading }}>
+        {/* A div evita o erro de Hydration escondendo o conteúdo até o match entre Server/Client */}
+        <div style={{ visibility: montado ? 'visible' : 'hidden' }}>
+            {children}
+        </div>
     </GlobalContext.Provider>
   );
 }
 
-export const dadosGlobais = () => useContext(GlobalContext);
-
-
+// O hook que faltava pra você usar nos componentes
+export const dadosGlobais = () => {
+    const context = useContext(GlobalContext);
+    if (!context) {
+        throw new Error("dadosGlobais deve ser usado dentro de um GlobalContextProvider");
+    }
+    return context;
+};

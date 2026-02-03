@@ -4,6 +4,7 @@ import admin from "../firebase/firebaseAdmin";
 
 export default async function VerificaToken(req: Request){
 
+    console.log("Entrou no Verifica Token");
     const authHeader = req.headers.get("authorization");
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -12,10 +13,15 @@ export default async function VerificaToken(req: Request){
 
     //pega o token 
     const token = authHeader.split(" ")[1];
+    console.log(token)
+
 
     try {
+        console.log("entrou no verifica token")
 
         const decodedToken = await admin.auth().verifyIdToken(token);
+        console.log(decodedToken);
+        console.log("retornou")
         return decodedToken; 
         
     } catch (error) {

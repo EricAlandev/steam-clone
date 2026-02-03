@@ -122,17 +122,17 @@ export default function EsqJogosDestaques({
                     {precoDesconto ? (
                         <div className="flex items-center justify-center gap-2.5  pt-1 pl-2 pb-1 pr-2">
                             <p className="preco_desconto">
-                                {preco}
+                                R$ {preco}
                             </p>    
 
                             <p className="preco">
-                                {precoDesconto}
+                                R$ {precoDesconto}
                             </p>
                         </div>
                         
                     ) : (
                         <p className="preco">
-                        {preco}
+                        R$ {preco}
                         </p>
                     )}
                 </div>    

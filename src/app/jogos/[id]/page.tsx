@@ -11,7 +11,6 @@ import { jogos } from "@/servers/types/TypeJogos";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RenderizacaoComents from "@/componentes/pages/detalheJogos/RenderizacaoComents";
-import WebSocketClient from "@/servers/websockets/WebSocketClient";
 
 type TipoComentario = {
   comentario : string,
@@ -62,7 +61,30 @@ const [detalhes, setDetalhes] = useState<jogos>();
        }
 
        puxaDetalhes();
-     }, [id])
+     }, [id]);
+
+
+     //Adiciona o jogo atual no carrinho do usuário
+      const AdicionarJogoAoCarrinho = async () => {
+      try{
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/usuario/${usuario?.id}/carrinho/api`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization' : `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            idJogo: id
+          })
+        })
+
+        const resposta = await response.json();
+      }
+
+      catch(error){
+        console.log(error);
+      }
+     }
 
 
      //Adiciona Comentário
@@ -94,8 +116,6 @@ const [detalhes, setDetalhes] = useState<jogos>();
 
     return(
         <div className=" pb-40 min-h-screen bg-[#212429]">
-
-            <WebSocketClient stateDetalhes={setDetalhes}/>
 
             <Layout/>
 
@@ -130,6 +150,8 @@ const [detalhes, setDetalhes] = useState<jogos>();
                  preco={detalhes?.preco}
                  preco_desconto={detalhes?.preco_desconto}
                  percentual={detalhes?.percentual}
+
+                 adicionarAoCarrinho={AdicionarJogoAoCarrinho}
                />
 
 

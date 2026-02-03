@@ -75,4 +75,14 @@
         @apply text-[gray] text-[17px] line-through
     }
 
+    /*Editar Perfil */
+
+    .textoEdicaoPerfil{
+        @apply text-[18px] text-[white]
+    }
+
+    .tipoInputAlterarPerfil{
+        @apply px-2 py-2 bg-[#35414F] rounded-md placeholder:text-[white]
+    }
+
 }

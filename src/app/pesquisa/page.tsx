@@ -11,12 +11,14 @@ import { jogos } from "@/servers/types/TypeJogos";
 
 export default  function PagePesquisa(){
 
-    const searchParams = useSearchParams();
-    const pesquisa = searchParams.get("pesquisa")
-
     const [jogosFiltrados, setJogosFiltrados] = useState<jogos[]>([]);
     const [quantidadeJogos, setQuantidadeJogos] = useState(0);
     const [error, setError] = useState();
+
+    const searchParams = useSearchParams();
+    const pesquisa = searchParams.get("pesquisa")
+
+
 
     const Pesquisar = async (precoOrdem? : string) => {
         try{

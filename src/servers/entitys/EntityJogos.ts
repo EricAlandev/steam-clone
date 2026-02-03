@@ -6,6 +6,7 @@ import  { Categoria } from "./EntityCategorias";
 import type { SlidesJogos } from "./EntitySlidesJogos";
 import type { Comentarios } from "./EntityComentarios";
 import type { Avaliacoes } from "./EntityAvaliacoes";
+import { Carrinho } from "./carrinho/EntityCarrinho";
 
 
 @Entity("jogos") // nome da tabela no banco
@@ -60,4 +61,8 @@ export class Jogos {
 
     @OneToOne("avaliacoes", (avali : any) => avali.jogos)
     avaliacoes!: Avaliacoes
+
+    //carrinho
+    @OneToMany("Carrinho", (carrinho : any) => carrinho.jogos)
+    carrinho!: Carrinho[]
 }
