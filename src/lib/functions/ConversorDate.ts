@@ -1,6 +1,6 @@
 
 
-export default function ConversorDate(lancamento: string){
+export default function ConversorDate(lancamento: string | undefined){
     
     //Converte o mês 
     const conversor = (mes: string) => {
@@ -22,7 +22,7 @@ export default function ConversorDate(lancamento: string){
         }
     }
 
-    let [ano, mes, dia]  = lancamento.slice(0,10).split("-");
+    let [ano, mes, dia]  = lancamento!.slice(0,10).split("-");
 
     //converte o mês
     const mesConvertido = conversor(mes);

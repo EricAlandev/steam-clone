@@ -36,7 +36,8 @@ export default function EsqComentario({
             </div>
 
             {/*Recomendação. */}
-            <div className="bg-[#121A24] ml-3 mr-3">
+            {recomenda && (
+                <div className="bg-[#121A24] ml-3 mr-3">
                 {/*Recomenda */}
                 {recomenda === true ? (
                     <div className="flex items-center gap-4  rounded-r-md">
@@ -61,6 +62,7 @@ export default function EsqComentario({
                    </>
                 )}
             </div>
+            )}
 
            <div className="min-h-[100px] pl-2 pr-2 ">
                 {/*Data de publicação */}

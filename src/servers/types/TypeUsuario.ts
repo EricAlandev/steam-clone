@@ -1,6 +1,11 @@
 import { ParamValue } from "next/dist/server/request/params"
 
 
+type TypeAmigos = {
+    amigo1: TypeUsuario[],
+    amigo2: TypeUsuario[]
+}
+
 export type TypeUsuario = {
     uid?: string,
     foto_perfil? : string,
@@ -10,7 +15,8 @@ export type TypeUsuario = {
     descricao? : string
     nivel? : number,
 
-    idPage?: ParamValue, //para verificar se o id da page é igual ao do usuário
+    idPage?: number, //para verificar se o id da page é igual ao do usuário
     id?: string, //Pra mandar o id do usuário
-    idUsuario?: string
+    idUsuario?: string,
+    amigos?: TypeAmigos[]
 }

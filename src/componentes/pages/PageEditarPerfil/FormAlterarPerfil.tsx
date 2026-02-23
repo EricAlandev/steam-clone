@@ -1,6 +1,3 @@
-
-
-
 'use client'
 
 import { TypeUsuario } from "@/servers/types/TypeUsuario";

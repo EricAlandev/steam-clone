@@ -20,8 +20,6 @@ export default async function VerificaToken(req: Request){
         console.log("entrou no verifica token")
 
         const decodedToken = await admin.auth().verifyIdToken(token);
-        console.log(decodedToken);
-        console.log("retornou")
         return decodedToken; 
         
     } catch (error) {

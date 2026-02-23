@@ -3,12 +3,12 @@ import { categorias } from "./TypeCategoria"
 import { slides } from "./TypeSlides"
 
 export type comentarios = {
-    recomenda: boolean,
-    data_publicacao: string,
-    comentario: string,
-    usuario: {
-        email: string,
-        foto_perfil: string,
+    recomenda?: boolean,
+    data_publicacao?: string,
+    comentario?: string,
+    usuario?: {
+        email?: string,
+        foto_perfil?: string,
     }
 }
 //Type do objeto jogos;

@@ -9,10 +9,8 @@ import { useState } from "react";
 import { dadosGlobais } from "@/componentes/gerenciaContext/GlobalContext";
 import { useRouter } from "next/navigation";
 
-
-
 export default function PageEditarPerfil(){
-    const [popUp, setPopUp] = useState<String>();
+    const [popUp, setPopUp] = useState<string>();
 
     const { token, loading} = dadosGlobais()!;
     const router = useRouter();
@@ -46,10 +44,11 @@ export default function PageEditarPerfil(){
         catch(error){
             if(error instanceof Error){//InstanceOf, verifica se a origem do elemento error vem do Objeto Error que é padrão TS;
                 console.log(error?.message);
-                ;
+
+                setPopUp(`${error}`);
             }
 
-            setPopUp("error");
+            
         }
     }
 
@@ -79,12 +78,14 @@ export default function PageEditarPerfil(){
 
                 {popUp === "Dados atualizados com sucesso" && (
                     <EsqPopUp
+                        mensagem={popUp}
                         closePopUp={() => setPopUp("")}
                     />
                 )}
 
                 {popUp === "error" && (
                     <EsqPopUp
+                        mensagem={popUp}
                         closePopUp={() => setPopUp("")}
                     />
                 )}

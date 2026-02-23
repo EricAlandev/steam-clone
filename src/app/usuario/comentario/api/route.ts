@@ -1,31 +1,21 @@
-
-//usuario/pesquisa/api
 import VerificaToken from "@/lib/functions/VerificaToken";
-import { PesquisaUsuarios } from "@/servers/controllers/ControllerUser";
+import { adicionarComentarioNoPerfil } from "@/servers/controllers/ControllerUser";
+
 
 export async function POST(req: Request){
 
     try{    
-
-        console.log("antes token")
-
         const {uid} = await VerificaToken(req);
 
-        console.log("pos token", uid)
+        const {comentario, idPage} = await req.json();
 
-        const body = await req.json();
+        const idUserTeraComentario = Number(idPage);
+
+        console.log(idUserTeraComentario, idPage);
         
-        if (!body){
-            throw new Error("Sem dados de pesquisa");
-        }
+        const resposta = await adicionarComentarioNoPerfil({idUserTeraComentario, comentario, uid});
 
-        const pesquisa = body.pesquisa;
-        
-        console.log("Antes de pesquisa")
-        const resposta = await PesquisaUsuarios(pesquisa, uid);
-
-        console.log("pos de pesquisa")
-
+        console.log("Passou");
 
         return new Response(JSON.stringify(resposta), {
             status: 201,

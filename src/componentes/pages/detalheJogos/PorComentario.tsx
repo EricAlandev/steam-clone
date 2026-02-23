@@ -31,9 +31,6 @@ export default function PorComentario({foto_perfil, dados} : foto_perfil){
     return(
         <div className=" ml-4 mr-4 ">
 
-            {/*Tittle */}
-            <p className="mt-6 p-3 bg-[#242D3F] text-[18px] text-[white] rounded-md">Comentários</p>
-
             {/*Adicionar comentário */}
             <div className="flex flex-col items-center pt-4 p-2 gap-2 bg-[#4D5C6A] ">
 
