@@ -31,12 +31,12 @@ export default async function WorkerAvaliacao(){
           let avaliacoesNegativas = 0;
           let avaliacoesPositivas = 0;
 
-        //verifica se existe avaliacao existente
-        const puxarAvaliacoesExistentes = await AppDataSource.getRepository(Avaliacoes).find({
+          //verifica se existe avaliacao existente
+          const puxarAvaliacoesExistentes = await AppDataSource.getRepository(Avaliacoes).find({
             where : {
                 jogos: {id: jogoAtual.id}
             }
-        })
+          })
 
           if (QTcomentarios > 0){
               //percorre a array de comentários 

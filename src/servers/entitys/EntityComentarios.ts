@@ -1,5 +1,3 @@
-
-// /entity/Usuario.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn} from "typeorm";
 import type { Jogos } from "./EntityJogos";
 import type { Usuario } from "./EntityUsers";

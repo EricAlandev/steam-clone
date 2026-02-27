@@ -12,5 +12,4 @@ export class Desenvolvedor {
 
     @OneToMany(() => Jogos, jogo => jogo.desenvolvedor)
     jogos!: Jogos[];
-
 }

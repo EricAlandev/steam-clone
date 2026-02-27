@@ -4,8 +4,9 @@ import { Jogos } from "../entitys/EntityJogos";
 import { getDataSource } from "@/lib/db";
 import ConversorDate from "@/lib/functions/ConversorDate";
 import { Comentarios } from "../entitys/EntityComentarios";
-import { ILike } from "typeorm";
-import { preco } from "@/componentes/pages/PesquisaPage/HeaderPesquisa";
+import { ILike, LessThan } from "typeorm";
+import { OpcoesTiposJogos } from "../entitys/opcoes/OpcoesTipoJogos";
+
 
 //types
 
@@ -15,91 +16,153 @@ type id = {
 
 export type pesquisaRequest = {
     pesquisa: string,
+    pesquisaCategoria: string,
     ordemPreco: string
 }
+
+
+type body = {
+    recomenda?: boolean,
+    comentario?: string, 
+    idJogo?: number,
+    idUsuario?: string
+}
+
+type TypeBody = {
+    body: body
+}
+
 
 //FILTRA JOGOS
 export async function FiltraJogos(body : pesquisaRequest){
 
-    const {pesquisa, ordemPreco} = body;
+    const {pesquisa, pesquisaCategoria, ordemPreco} = body;
 
-    //Define o tipo de order
-    let colunaParaOrdenar = "preco";
-
-    //Define a ordem da renderização dos propdutos;
-    let ordem = "ASC";
-
-    if (!pesquisa){
-        throw new Error("Sem nada para pesquisar");
+    if(!pesquisa && !pesquisaCategoria){
+        throw new Error("Nenhum dado de pesquisa preenchido");
     }
-
-    switch(ordemPreco){
-        case "Maior Preço":
-            colunaParaOrdenar = "preco";
-            ordem = "DESC"
-            break;
-        
-        case "Menor Preço":
-            colunaParaOrdenar = "preco";
-            ordem = "ASC"
-            break;
-
-        case "Nome":
-            colunaParaOrdenar = "nome";
-            ordem = "ASC"
-            break;
-
-        case "Lançamento":
-            colunaParaOrdenar = "lancamento";
-            ordem = "DESC"
-            break;
-    }
-
+    
+    //pool
     const AppDataSource = await getDataSource();
 
-    const puxarJogos = await AppDataSource.getRepository(Jogos).find({
-        where: {nome: ILike(`%${pesquisa}%`)},
-        relations: {
-            categoria: true,
-            avaliacoes: true
-        },
-        order: {
-            [colunaParaOrdenar] : ordem as 'ASC' | 'DESC'
+    //array type
+    let valueReturn: Jogos[] = [];
+    let quantityGames = null;
+
+    console.log(pesquisa, pesquisaCategoria);
+
+    //TYPE SEARCH
+    if(pesquisa){
+         //Define o tipo de order
+        let colunaParaOrdenar = "preco";
+
+        //Define a ordem da renderização dos propdutos;
+        let ordem = "ASC";
+        
+        switch(ordemPreco){
+            case "Maior Preço":
+                colunaParaOrdenar = "preco";
+                ordem = "DESC"
+                break;
+            
+            case "Menor Preço":
+                colunaParaOrdenar = "preco";
+                ordem = "ASC"
+                break;
+
+            case "Nome":
+                colunaParaOrdenar = "nome";
+                ordem = "ASC"
+                break;
+
+            case "Lançamento":
+                colunaParaOrdenar = "lancamento";
+                ordem = "DESC"
+                break;
         }
-    })
 
-    if (puxarJogos.length === 0){
-        throw new Error("Não achamos o que pesquisa");
-    }   
+        const puxarJogos = await AppDataSource.getRepository(Jogos).find({
+            where: {nome: ILike(`%${pesquisa}%`)},
+            relations: {
+                categoria: true,
+                avaliacoes: true
+            },
+            order: {
+                [colunaParaOrdenar] : ordem as 'ASC' | 'DESC'
+            }
+        })
 
-    const quantidadeJogos = puxarJogos.length;
+        if (puxarJogos.length === 0){
+            throw new Error("Não achamos o que pesquisa");
+        }   
 
-    //converte os valores
+        const quantidadeJogos = puxarJogos.length;
 
-    const ArrayNovo = puxarJogos?.map((jogo) => {
-        const valoresConvertidos = {
-            id: jogo.id,
-            nome : jogo.nome,
-            foto_jogo : jogo.foto_jogo,
-            preco_desconto : ConversorPrecos(jogo.preco_desconto),
-            preco : ConversorPrecos(jogo.preco),
-            aceitacao_jogo : jogo.avaliacoes.aceitacao_jogo,
-            categorias : jogo.categoria
+    
+        quantityGames = quantidadeJogos;
+        valueReturn = puxarJogos;
+    }
+
+    //TYPE CATEGORY SEARCH
+    else if(pesquisaCategoria){
+
+        console.log("Entrou pesquisaCategoria");
+
+        const puxarJogos = await AppDataSource.getRepository(Jogos).find(
+            {
+                where: {
+                    categoria: {nome_categoria: pesquisaCategoria}
+                },
+                relations: {
+                    categoria: true,
+                    avaliacoes: true
+                }
+            }
+        )
+
+        if(puxarJogos.length === 0){
+            throw new Error("Nenhum jogo encontrado");
         }
 
-        return valoresConvertidos
-    })
+        console.log(puxarJogos);
 
-    //retorna os jogos pesquisados;
-    return {quantidadeJogos, ArrayNovo}
+        const quantidadeJogos = puxarJogos.length;
+
+        quantityGames = quantidadeJogos;
+        valueReturn = puxarJogos;
+    }
+
+    if(valueReturn.length > 0){
+        //converte os valores
+        const ArrayNovo = valueReturn?.map((jogo) => {
+            const valoresConvertidos = {
+                id: jogo.id,
+                nome : jogo.nome,
+                foto_jogo : jogo.foto_jogo,
+                preco_desconto : ConversorPrecos(jogo.preco_desconto),
+                preco : ConversorPrecos(jogo.preco),
+                aceitacao_jogo : jogo.avaliacoes.aceitacao_jogo,
+                categorias : jogo.categoria
+            }
+
+            return(valoresConvertidos);
+        })
+
+        return {ArrayNovo, quantityGames};
+    }
 }
 
 //Puxa Jogos 
-export async function PuxarJogos(){
+export async function PuxarJogosDestaques(){
 
     const AppDataSource = await getDataSource();
 
     const jogosPuxado = await AppDataSource.getRepository(Jogos).find({
+    where: {
+        categoria: {
+            nome_categoria: "Destaque"
+        }
+    },
     order: {
         id: "ASC",
     },
@@ -115,6 +178,58 @@ export async function PuxarJogos(){
     //preço do jogos 
 
 
+    const JogosConvertidos = jogosPuxado.map((jogo) => {
+
+        const jogosPuxado = {
+            id: jogo.id,
+            nome: jogo.nome,
+            descricao: jogo.descricao,
+            lancamento: jogo.lancamento,
+            foto_destaque: jogo.foto_destaque,
+            foto_jogo: jogo.foto_jogo,
+            preco: ConversorPrecos(jogo.preco),
+            preco_desconto: ConversorPrecos(jogo.preco_desconto),
+            percentual: CalculoPercentual(jogo.preco, jogo.preco_desconto),
+            categorias: jogo.categoria
+        }
+
+        return jogosPuxado
+    })
+
+    return JogosConvertidos
+    
+}
+
+export async function PuxarJogosAteCertoValor(valor: string){
+
+    if(valor === undefined){
+        throw new Error("Nenhum valor definido pra puxar");
+    }
+
+    
+    //convert the number and multiply with 100, to become possible to pull;
+    const convertedValue = Number(valor) * 100;
+
+    const AppDataSource = await getDataSource();
+
+    const jogosPuxado = await AppDataSource.getRepository(Jogos).find({
+    where: [
+        {preco:  LessThan(convertedValue)},
+        {preco_desconto:  LessThan(convertedValue)},
+    ],
+    order: {
+        id: "ASC"
+    },
+    relations: {
+        categoria: true
+    }
+    });
+
+    if (jogosPuxado.length === 0){
+        throw new Error("Nenhum jogo encontrado");
+    }
+    
+    //preço do jogos 
     const JogosConvertidos = jogosPuxado.map((jogo) => {
 
         const jogosPuxado = {
@@ -191,18 +306,6 @@ export async function DetalheJogos({idNumber} : id){
       };
 }
 
-
-type body = {
-    recomenda?: boolean,
-    comentario?: string, 
-    idJogo?: number,
-    idUsuario?: string
-}
-
-type TypeBody = {
-    body: body
-}
-
 export default async function AdicionarComentario({body}: TypeBody){
 
     const {comentario , recomenda, idJogo, idUsuario} = body;
@@ -239,4 +342,62 @@ export default async function AdicionarComentario({body}: TypeBody){
 
 
     await AppDataSource.getRepository(Comentarios).save(adicionarUsuario)
+}
+
+
+
+//PULL THE OPTIONS OF THE GAMES
+export async function PuxarTipoJogos(tipoJogo: string){
+    console.log(tipoJogo);
+
+    const AppDataSource = await getDataSource();
+
+    //pull the chooses of the user;
+    const tipos = await AppDataSource.getRepository(OpcoesTiposJogos).find();
+
+    if(tipos.length === 0){
+        throw new Error("Nenhum tipo");
+    }
+
+    //pull the games of the type;
+    const games = await AppDataSource.getRepository(Jogos).find(
+        {
+            where: {
+                categoria: {
+                    nome_categoria: tipoJogo
+                }
+            },
+            relations: {
+                categoria: true,
+                
+            }
+        }
+    )
+
+    console.log("games", tipos ,"tipos",tipoJogo);
+    
+    if(games.length === 0){
+        throw new Error("Nenhum jogo puxado");
+    }
+
+    //preço do jogos 
+    const JogosConvertidos = games.map((jogo) => {
+
+        const jogosPuxado = {
+            id: jogo.id,
+            nome: jogo.nome,
+            descricao: jogo.descricao,
+            lancamento: jogo.lancamento,
+            foto_destaque: jogo.foto_destaque,
+            foto_jogo: jogo.foto_jogo,
+            preco: ConversorPrecos(jogo.preco),
+            preco_desconto: ConversorPrecos(jogo.preco_desconto),
+            percentual: CalculoPercentual(jogo.preco, jogo.preco_desconto),
+            categorias: jogo.categoria
+        }
+
+        return jogosPuxado
+    })
+
+    return {jogos: JogosConvertidos, tipos};
 }

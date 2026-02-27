@@ -23,8 +23,7 @@ export default function JogosDestaques({jogos}: ObjetoJogos){
                     slidesPerView : 3
                 }
             }}
-            className="w-[93vw] mx-auto
-            md:min-w-[300px] md:max-w-[1159px] md:mx-auto"
+            className=""
             >
                 {jogos?.map((jogo) => (
                     <SwiperSlide key={jogo.id}>

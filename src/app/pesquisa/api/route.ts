@@ -5,10 +5,14 @@ import { pesquisaRequest } from "@/servers/controllers/ControllerJogos";
 export async function POST(req: Request){
     
     try{
-        const body : pesquisaRequest = await req.json();
+        const body = await req.json();
 
+        console.log(body);
         //puxa jogos
         const jogos = await FiltraJogos(body);
+
+        console.log(jogos, "vai voltar");
+
 
         return new Response(JSON.stringify(jogos), {
             status: 201,

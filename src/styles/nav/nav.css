@@ -85,4 +85,10 @@
         @apply px-2 py-2 bg-[#35414F] rounded-md placeholder:text-[white]
     }
 
+    /* Textos na homepage */
+
+    .titulo_HomePage{
+        @apply mb-3 text-[18px] text-[white] font-medium
+    }
+
 }

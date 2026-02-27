@@ -71,7 +71,7 @@ export default function EsqJogosDestaques({
                         </div>
                     </div>
                     
-                                    {/*Verifica se existe ou não o desconto*/}
+                {/*Verifica se existe ou não o desconto*/}
                 <div className="absolute z-10 bottom-0 right-0 
                   min-w-[150px] flex
                 bg-[#1A1D24]  md:hover:bg-[#071631]

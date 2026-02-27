@@ -17,8 +17,7 @@ export default  function PagePesquisa(){
 
     const searchParams = useSearchParams();
     const pesquisa = searchParams.get("pesquisa")
-
-
+    const pesquisaCategoria = searchParams.get("pesquisaCategoria")
 
     const Pesquisar = async (precoOrdem? : string) => {
         try{
@@ -28,10 +27,13 @@ export default  function PagePesquisa(){
                     'Content-Type' : 'application/json'
                 },
                 body: JSON.stringify({
-                    pesquisa : pesquisa,
+                    pesquisa : pesquisa || null,
+                    pesquisaCategoria: pesquisaCategoria || null,
                     ordemPreco: precoOrdem || null
                 })
             });
+
+            console.log(pesquisaCategoria, pesquisa);
     
             const {quantidadeJogos, ArrayNovo} = await response.json();
             setQuantidadeJogos(quantidadeJogos)
@@ -45,14 +47,8 @@ export default  function PagePesquisa(){
 
     //ativa a função de pesquisa toda vez que mudar a query;
     useEffect(() => {
-        const ativaPesquisa = async () => {
-            await Pesquisar();
-        }
-
-        if(pesquisa){
-            ativaPesquisa();
-        }
-    }, [pesquisa])
+       Pesquisar();
+    }, [])
 
     return(
         <div className="flex flex-col gap-20 min-h-screen bg-[#223E59]">
