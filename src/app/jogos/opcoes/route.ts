@@ -5,9 +5,10 @@ export async function GET(req: Request){
         const {searchParams} = new URL(req.url);
         let tipoJogo = searchParams.get("tipoJogo");
 
-        if(!tipoJogo || tipoJogo !== "" || tipoJogo === undefined){
-            //define the type of the game who gonna be pulled;
-            tipoJogo = "Novidades populares"
+        console.log("tipo",tipoJogo);
+
+        if(!tipoJogo){
+            throw new Error("Nenhuma categoria de jogos para puxar");
         }
 
         const opcoes = await PuxarTipoJogos(tipoJogo);

@@ -12,10 +12,11 @@ type opcoes = {
 
 export default function Galeria({tiposOpcoes, enviarObjeto}: opcoes){
 
-    const [tipoCategoria, setTipoCategoria] = useState("Novidades populares");
+    const [tipoCategoria, setTipoCategoria] = useState<string>("Novidades populares");
 
     useEffect(() => {
-        enviarObjeto;
+        console.log("Enter in the useEffect", tipoCategoria);
+        enviarObjeto(tipoCategoria);
     }, [tipoCategoria])
 
     return(

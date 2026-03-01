@@ -7,6 +7,7 @@ import type { SlidesJogos } from "./EntitySlidesJogos";
 import type { Comentarios } from "./EntityComentarios";
 import type { Avaliacoes } from "./EntityAvaliacoes";
 import { Carrinho } from "./carrinho/EntityCarrinho";
+import { OpcoesTiposJogos } from "./opcoes/OpcoesTipoJogos";
 
 
 @Entity("jogos") // nome da tabela no banco
@@ -65,4 +66,13 @@ export class Jogos {
     //carrinho
     @OneToMany("Carrinho", (carrinho : any) => carrinho.jogos)
     carrinho!: Carrinho[]
+
+    //type Jogos to find in the opcoes_tipo_jogos
+    @ManyToMany(() => OpcoesTiposJogos, (tipo) => tipo.jogos)
+    @JoinTable({
+        name: "n_opcoes_com_jogos",
+        joinColumn: { name: "jogos_id", referencedColumnName: "id" },
+        inverseJoinColumn: { name: "opcoes_id", referencedColumnName: "id" }
+    })
+    tipos!: OpcoesTiposJogos[];
 }

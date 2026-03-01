@@ -95,11 +95,11 @@ export  default function Home() {
       }
     }
 
-    const puxarOpcoesJogos = async(tipoJogo?: string) => {
+    const puxarOpcoesJogos = async(valor?: string) => {
       try{
-          const opcoes = await PuxarOpcoesJogos(tipoJogo);
-
-          console.log(opcoes);
+          console.log("valor", valor);
+          const opcoes = await PuxarOpcoesJogos(valor);
+          
           setOpcoesJogos(opcoes);
       }
 
@@ -112,7 +112,6 @@ export  default function Home() {
       puxarJogos();
       puxarCategorias();
       puxarAte20Reais();
-      puxarOpcoesJogos();
     }, [])
 
 

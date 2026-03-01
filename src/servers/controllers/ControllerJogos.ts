@@ -348,28 +348,34 @@ export default async function AdicionarComentario({body}: TypeBody){
 
 //PULL THE OPTIONS OF THE GAMES
 export async function PuxarTipoJogos(tipoJogo: string){
-    console.log(tipoJogo);
+    console.log("tipo jogo", tipoJogo);
 
     const AppDataSource = await getDataSource();
 
+    console.log("antes de tipos")
+
+
     //pull the chooses of the user;
     const tipos = await AppDataSource.getRepository(OpcoesTiposJogos).find();
+
+    console.log("tipos")
+
 
     if(tipos.length === 0){
         throw new Error("Nenhum tipo");
     }
 
+    console.log("antes")
     //pull the games of the type;
     const games = await AppDataSource.getRepository(Jogos).find(
         {
             where: {
-                categoria: {
-                    nome_categoria: tipoJogo
+                tipos: {
+                    opcao: tipoJogo
                 }
             },
             relations: {
-                categoria: true,
-                
+                tipos: true
             }
         }
     )

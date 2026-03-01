@@ -29,10 +29,7 @@ export async function AddFriend(id: number, uid: string){
     if (!adicionar){
         throw new Error("Falha ao adicionar amigo");
     }
-
-    console.log(adicionar);
-
-
+    
     return(id);
 } 
 
