@@ -135,7 +135,7 @@ export async function PullGamesPublisher(id: number, categoria: string){
     return arrayJogos;
 }
 
-//Call Data Publisher
+//add follower from Publisher
 export async function AddNewFollower(uid: string, id: number){
 
     const AppDataSource = await getDataSource();
@@ -207,6 +207,79 @@ export async function AddNewFollower(uid: string, id: number){
         if(distribuidoraUpdate.affected === 0){
             throw new Error("Fail in the publisher update");
         }
+    }
+
+    return({Mensagem : "atualizou o publisher followers"}); 
+}
+
+
+//remove follower from Publisher
+export async function RemoveNewFollower(uid: string, id: number){
+
+    const AppDataSource = await getDataSource();
+
+    const usuario = await AppDataSource.getRepository(Usuario).findOne({
+        where: {
+           uid: uid
+        }
+    });
+
+    if(!usuario){
+        throw new Error("Usuário não logado");
+    }
+
+    const idUsuario = usuario?.id;
+
+    const publisherData = await AppDataSource.getRepository(Distribuidora).findOne(
+        {
+            where: {
+                id: id
+            }
+            ,
+            relations: {
+                followers: true
+            }
+        }
+    )
+
+    if(!publisherData){
+        throw new Error("Sem dados de publisher")
+    }
+
+    const idPublisher = Number(publisherData?.id);
+
+    //verify if actually exists the follower line;
+    const followerDistribuidora = await AppDataSource.getRepository(SeguidoresJogos).find(
+        {
+            where: {
+                distribuidora: {id: idPublisher},
+                usuario: {id: idUsuario}
+            }
+        }
+    )  
+    
+    if(!followerDistribuidora){
+        throw new Error("This user are actually, not a follower");
+    }
+
+    const remove = await AppDataSource.getRepository(SeguidoresJogos).delete({
+        distribuidora: {id: idPublisher},
+        usuario: {id : idUsuario}
+    })
+
+    if(remove.affected === 0){
+        throw new Error("error with the remove of the follower");
+    }
+
+    const followsLength = (publisherData.followers.length) - 1;
+
+    const distribuidoraUpdate = await AppDataSource.getRepository(Distribuidora).update(
+        {id: idPublisher},
+        {seguidores: followsLength}
+    )
+
+    if(distribuidoraUpdate.affected === 0){
+        throw new Error("Fail in the publisher update");
     }
 
     return({Mensagem : "atualizou o publisher followers"}); 

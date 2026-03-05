@@ -2,6 +2,7 @@
 import EsqComentUser from "@/componentes/esqueletos/EsqComentUser"
 import { dadosGlobais } from "@/componentes/gerenciaContext/GlobalContext"
 import { TypeUsuario } from "@/servers/types/TypeUsuario"
+import Link from "next/link"
 
 
 type typeComentarioUser = {
@@ -38,17 +39,24 @@ export default  function RenderComentarios({comentarios = [], idPage, idUsuario,
                 comentarios.map((c) => {
                     if(Number(c.usuario_enviou.id) !== Number(idPage)){
                         return(
-                            <EsqComentUser
-                            key={c.id}
-                            usuario={c.usuario_enviou}
-                            data_publicacao={c.data_publicacao}
-                            comentario={c.comentario}
-                            PagePertenceAoUser={PageDoProprioUsuario}
-        
-                            deletarComentario={() =>{
-                                deletarComentarioRender(c.id!)
-                            }}
-                        />
+                            <>
+                            <Link
+                                key={c.id}
+                                href={`${c?.usuario_enviou.id}`}
+                            >
+                                <EsqComentUser
+                                usuario={c.usuario_enviou}
+                                data_publicacao={c.data_publicacao}
+                                comentario={c.comentario}
+                                PagePertenceAoUser={PageDoProprioUsuario}
+            
+                                deletarComentario={() =>{
+                                    deletarComentarioRender(c.id!)
+                                }}
+                                />
+                            </Link>
+                            </>
+                       
                         )
                     }  
                 })

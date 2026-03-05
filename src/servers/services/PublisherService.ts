@@ -74,8 +74,31 @@ export async function GamesByCategoryPublisher({
 export async function AddFollower(id: string, token: string){
 
     try{
-        const request = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/publisher/${id}/api`, {
+        const request = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/publisher/${id}/follower/api`, {
             method: "POST",
+            headers: {
+                'Content-Type' : 'application/json',
+                'Authorization' : `Bearer ${token}`
+            }
+        });
+
+        const response = await request.json();
+
+        console.log(response);
+
+        return response;
+    }
+
+    catch(error){
+        console.log(error);
+    }
+}
+
+export async function RemoveFollower(id: string, token: string){
+
+    try{
+        const request = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/publisher/${id}/follower/api`, {
+            method: "DELETE",
             headers: {
                 'Content-Type' : 'application/json',
                 'Authorization' : `Bearer ${token}`

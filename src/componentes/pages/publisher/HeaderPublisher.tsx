@@ -4,7 +4,10 @@ type DistribuidoraC = {
     fundo?: string, 
     nome_distribuidora?: string,
     seguidores?: number,
-    adicionarSeguidor: (valor: null) => void;
+    seguidor?: boolean,
+    adicionarSeguidor: (valor: null) => void,
+    removeFollower: (valor: null) => void,
+
 }
 
 export default function HeaderPublisher({
@@ -12,7 +15,9 @@ export default function HeaderPublisher({
     fundo, 
     nome_distribuidora,
     seguidores,
-    adicionarSeguidor
+    seguidor,
+    adicionarSeguidor,
+    removeFollower
 } : DistribuidoraC){
 
     return(
@@ -41,12 +46,22 @@ export default function HeaderPublisher({
                             <div className="absolute inset-0 bg-[#111111] z-0 opacity-80 rounded-md"></div>
                             
                             <div className="relative top-0 z-10 flex items-center gap-4 px-1 py-0.5 ">
-                                <button
-                                className="min-w-[80px] p-1.5 bg-[#588A1B] text-[#E0E0E0] rounded-[5px]"
-                                onClick={() => adicionarSeguidor(null)}
-                                >
-                                    Seguir
-                                </button>
+                                {seguidor ? (
+                                    <button
+                                    className="min-w-[80px] max-w-[80px] p-1.5 bg-[#588A1B] text-[#E0E0E0] rounded-[5px]"
+                                    onClick={() => removeFollower(null)}
+                                    >
+                                        Deseguir
+                                    </button>
+                                ): (
+                                    <button
+                                    className="min-w-[80px] p-1.5 bg-[#588A1B] text-[#E0E0E0] rounded-[5px]"
+                                    onClick={() => adicionarSeguidor(null)}
+                                    >
+                                        Seguir
+                                    </button>
+                                )}
+                                
 
                                 <p className="text-center text-[#A0A0A0]">
                                     {seguidores} <br/>

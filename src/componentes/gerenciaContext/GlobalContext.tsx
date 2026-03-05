@@ -39,19 +39,24 @@ export default function GlobalContextProvider({ children }: Children) {
   }
 
   useEffect(() => {
-    const ParsearValores = () => {
+
+    //gonna verify and replace if is necessary the id token of the current user;
+    const auth = getAuth(app);
+
+    const verifyTokenChange = onIdTokenChanged(auth , async(user) => {
+      if(user){
+        const newToken = await user?.getIdToken();
+
+        login(usuario, newToken);
+      }
+
+      else{
+        logOut();
+      }
+    })
+
+    const ParsearValores = async () => {
       try {
-        //gonna verify and replace if is necessary the id token of the current user;
-        const auth = getAuth(app);
-
-        onIdTokenChanged(auth, async (user) => {
-          if(user){
-             const newToken = await user.getIdToken();
-             await login(usuario, newToken);
-          }
-        })
-          
-
         const localStorageUser = localStorage.getItem("usuario");
         const localStorageToken = localStorage.getItem("token");
 
@@ -63,15 +68,15 @@ export default function GlobalContextProvider({ children }: Children) {
         }
 
 
-
-      } catch (e) {
+        await verifyTokenChange();
+      } catch (e){
         console.error("Erro ao ler localStorage", e);
       } finally {
         setLoading(false);
         setMontado(true);
       }
     }
-
+    
     ParsearValores();
   }, []);
 

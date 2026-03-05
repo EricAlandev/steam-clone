@@ -7,7 +7,7 @@ import RenderGamesPublisher from "@/componentes/pages/publisher/RenderGamesPubli
 import RenderGamesCategoryPublisher from "@/componentes/pages/publisher/RenderJogosPublisher";
 import type { Distribuidora } from "@/servers/entitys/EntityDistribuira";
 import type { Jogos } from "@/servers/entitys/EntityJogos";
-import { AddFollower, GamesByCategoryPublisher, PuxarDadosPublisher } from "@/servers/services/PublisherService";
+import { AddFollower, GamesByCategoryPublisher, PuxarDadosPublisher, RemoveFollower } from "@/servers/services/PublisherService";
 import { jogos } from "@/servers/types/TypeJogos";
 import { data } from "framer-motion/client";
 import { useParams, useSearchParams } from "next/navigation";
@@ -26,7 +26,7 @@ export type asOpcoes = {
 type Publisher = {
     publisher: Distribuidora,
     jogos: Jogos[],
-    follower: string,
+    follower: boolean,
     opcoesJogos: asOpcoes[],
 }
 
@@ -111,6 +111,20 @@ export default function PublisherPage(){
         }
     }
 
+    const RemoveFollowers = async () => {
+        try{
+            console.log("enter inside of the add followers");
+            const publisherData = await RemoveFollower(id, token);
+            
+           await callDataPublisher();
+            
+        }
+
+        catch(error){
+            console.log(error);
+        }
+    }
+
     return(
         <div className="min-h-screen bg-[#212429]">
             <HeaderMobile/>
@@ -122,7 +136,9 @@ export default function PublisherPage(){
                     capa={dataPublisher?.publisher?.capa}
                     nome_distribuidora={dataPublisher?.publisher?.nome_distribuidora}
                     seguidores={dataPublisher?.publisher?.seguidores}
+                    seguidor={dataPublisher?.follower}
                     adicionarSeguidor={AddFollowers}
+                    removeFollower={RemoveFollowers}
 
                 />
             </div>

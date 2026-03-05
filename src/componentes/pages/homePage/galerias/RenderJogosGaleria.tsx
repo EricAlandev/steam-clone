@@ -13,6 +13,7 @@ export default function RenderJogosGaleria({osJogos}: jogosRecebidos){
         <div className="p-2 bg-[#2A475E] ">
             {osJogos?.map((j) => (
                 <Link
+                key={j.id}
                  href={`/jogos/${j.id}`}
                 >
                     <EsqJogosGaleria
