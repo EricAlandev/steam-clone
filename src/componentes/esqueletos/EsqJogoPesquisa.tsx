@@ -57,7 +57,7 @@ export default  function EsqJogosPesquisa(
             {/*Quadrante esquerdo */}
             <div>
                 {/*Nome jogo */}
-                <p className="max-w-[140px] text-[white]">{nome}</p>
+                <p className="min-w-[130px] max-w-[130px] text-[white]">{nome}</p>
 
                     {/*Aceitação do jogo */}
                     {qualidadeJogo === "negativa" && (

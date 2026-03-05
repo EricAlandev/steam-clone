@@ -1,20 +1,21 @@
 import { jogos } from "@/servers/types/TypeJogos";
+import Link from "next/link";
 
 
 export default function HeaderDetalheJogos({
+    id,
     nome,
     descricao,
     lancamento,
     foto_jogo,
     categorias,
-    desensolvedor_id,
     nomedesenvolvedor,
+
     distribuidora_id,
     nome_distribuidora,
+
     aceitacao_jogo,
     quantidade_comentarios
-
-
 
 } : jogos) {
 
@@ -54,17 +55,21 @@ export default function HeaderDetalheJogos({
                         {/*Dados */}
                         <div className="flex flex-col min-w-[120px] gap-2">
 
-                        <p 
-                                className=" text-[#45ACFF]"
-                            >             
+                        {/*Go to the developer page */}
+                        <Link
+                            href={`/pesquisa/${nomedesenvolvedor}`}
+                            className=" text-[#45ACFF]"
+                        >             
                             {nomedesenvolvedor}
-                            </p>
+                        </Link>
 
-                        <p 
+                        {/*Go to the publisher page */}
+                        <Link
+                         href={`/publisher/${distribuidora_id}`}
                         className=" text-[#45ACFF]"
                         >  
                             {nome_distribuidora}
-                        </p>
+                        </Link>
 
                         <p className="text-[#D0D0D0]">
                                 {lancamento}

@@ -50,20 +50,6 @@ const {usuario, token} = dadosGlobais()!;
 
 const [detalhes, setDetalhes] = useState<jogos>();
 
-     useEffect(() => {
-       if(id === '0'){
-          return
-       }
-
-       const puxaDetalhes = async() => {
-        const responsta = await DetalheJogos(id);
-        setDetalhes(responsta);
-       }
-
-       puxaDetalhes();
-     }, [id]);
-
-
      //Adiciona o jogo atual no carrinho do usuário
       const AdicionarJogoAoCarrinho = async () => {
       try{
@@ -85,6 +71,8 @@ const [detalhes, setDetalhes] = useState<jogos>();
         console.log(error);
       }
      }
+
+     
 
 
      //Adiciona Comentário
@@ -114,6 +102,20 @@ const [detalhes, setDetalhes] = useState<jogos>();
         }
      }
 
+     useEffect(() => {
+      if(id === '0'){
+         return
+      }
+
+      const puxaDetalhes = async() => {
+       const responsta = await DetalheJogos(id);
+       setDetalhes(responsta);
+      }
+
+      puxaDetalhes();
+    }, [id]);
+
+
     return(
         <div className=" pb-40 min-h-screen bg-[#212429]">
 
@@ -122,6 +124,7 @@ const [detalhes, setDetalhes] = useState<jogos>();
             <div className="pt-15 ">
               {/*Cabeçário */}
                <HeaderDetalheJogos
+                  id={detalhes?.id}
                   nome={detalhes?.nome}
                   descricao={detalhes?.descricao}
                   lancamento={detalhes?.lancamento}
@@ -156,10 +159,12 @@ const [detalhes, setDetalhes] = useState<jogos>();
 
 
                {/*Por comentário */}
-               <PorComentario
-                foto_perfil={usuario?.foto_perfil}
-                dados={AdicionarComentario}
-               />
+               <div className="mt-10">
+                <PorComentario
+                  foto_perfil={usuario?.foto_perfil}
+                  dados={AdicionarComentario}
+                />
+               </div>
 
                {/*Array de comentários*/}
                <RenderizacaoComents

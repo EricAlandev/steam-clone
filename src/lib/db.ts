@@ -14,13 +14,16 @@ import { Carrinho } from "@/servers/entitys/carrinho/EntityCarrinho";
 import { ComentariosUser } from "@/servers/entitys/comentarios/EntityComentarioUser";
 import { Amigos } from "@/servers/entitys/amigos/EntityAmigos";
 import { OpcoesTiposJogos } from "@/servers/entitys/opcoes/OpcoesTipoJogos";
+import { SeguidoresJogos } from "@/servers/entitys/publisher/EntityFollowersDistribuidora";
+import { OpcoesTipoPublisher } from "@/servers/entitys/publisher/EntityOpcoesTipos";
+import { PivoOpcoesTiposPublisher } from "@/servers/entitys/publisher/EntityOpcoesTiposPublisher";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.NEXT_PUBLIC_DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos],
+  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos, SeguidoresJogos, OpcoesTipoPublisher, PivoOpcoesTiposPublisher],
   migrations: [],
   subscribers: [] 
 });

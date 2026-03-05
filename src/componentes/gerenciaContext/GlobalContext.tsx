@@ -1,5 +1,7 @@
 'use client'
 
+import { app } from "@/lib/firebase/firebase";
+import { getAuth, onIdTokenChanged } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 
 type GlobalContextType = {
@@ -39,6 +41,17 @@ export default function GlobalContextProvider({ children }: Children) {
   useEffect(() => {
     const ParsearValores = () => {
       try {
+        //gonna verify and replace if is necessary the id token of the current user;
+        const auth = getAuth(app);
+
+        onIdTokenChanged(auth, async (user) => {
+          if(user){
+             const newToken = await user.getIdToken();
+             await login(usuario, newToken);
+          }
+        })
+          
+
         const localStorageUser = localStorage.getItem("usuario");
         const localStorageToken = localStorage.getItem("token");
 
@@ -48,6 +61,9 @@ export default function GlobalContextProvider({ children }: Children) {
         if (localStorageToken && localStorageToken !== "undefined") {
           setToken(JSON.parse(localStorageToken));
         }
+
+
+
       } catch (e) {
         console.error("Erro ao ler localStorage", e);
       } finally {

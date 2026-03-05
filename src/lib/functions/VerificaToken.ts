@@ -20,10 +20,47 @@ export default async function VerificaToken(req: Request){
         console.log("entrou no verifica token")
 
         const decodedToken = await admin.auth().verifyIdToken(token);
+
+        console.log(decodedToken);
         return decodedToken; 
         
     } catch (error) {
         throw new Error("Token inválido ou expirado");
+    }
+    
+}
+
+export  async function VerificaTokenSemQuebrar(req: Request){
+
+    console.log("Entrou no Verifica Token");
+    const authHeader = req.headers.get("authorization");
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        throw new Error("Token não fornecido ou formato inválido");
+    }
+
+    //pega o token 
+    const token = authHeader.split(" ")[1];
+    
+    let verificado = 'N';
+
+
+    try {
+        console.log("entrou no verifica token")
+
+        const decodedToken = await admin.auth().verifyIdToken(token);
+        
+        if(decodedToken){
+            const uid = decodedToken?.uid;
+            verificado = 'S'
+            return {uid, verificado}; 
+        }
+
+        
+        
+    } catch (error) {
+        console.log(verificado);
+        return {verificado};
     }
     
 }

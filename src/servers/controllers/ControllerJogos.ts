@@ -6,6 +6,7 @@ import ConversorDate from "@/lib/functions/ConversorDate";
 import { Comentarios } from "../entitys/EntityComentarios";
 import { ILike, LessThan } from "typeorm";
 import { OpcoesTiposJogos } from "../entitys/opcoes/OpcoesTipoJogos";
+import { Desenvolvedor } from "../entitys/EntityDev";
 
 
 //types
@@ -17,7 +18,9 @@ type id = {
 export type pesquisaRequest = {
     pesquisa: string,
     pesquisaCategoria: string,
-    ordemPreco: string
+    ordemPreco: string,
+    desenvolvedor: string,
+    distribuidora: string
 }
 
 
@@ -34,14 +37,8 @@ type TypeBody = {
 
 
 //FILTRA JOGOS
-export async function FiltraJogos(body : pesquisaRequest){
+export async function FiltraJogos({pesquisa, pesquisaCategoria, desenvolvedor, ordemPreco} : pesquisaRequest){
 
-    const {pesquisa, pesquisaCategoria, ordemPreco} = body;
-
-    if(!pesquisa && !pesquisaCategoria){
-        throw new Error("Nenhum dado de pesquisa preenchido");
-    }
-    
     //pool
     const AppDataSource = await getDataSource();
 
@@ -106,8 +103,6 @@ export async function FiltraJogos(body : pesquisaRequest){
     //TYPE CATEGORY SEARCH
     else if(pesquisaCategoria){
 
-        console.log("Entrou pesquisaCategoria");
-
         const puxarJogos = await AppDataSource.getRepository(Jogos).find(
             {
                 where: {
@@ -130,6 +125,48 @@ export async function FiltraJogos(body : pesquisaRequest){
 
         quantityGames = quantidadeJogos;
         valueReturn = puxarJogos;
+    }
+
+    //SEARCH THE GAMES OF THE DEVELOPER
+    else if(desenvolvedor){
+
+        const dev = await AppDataSource.getRepository(Desenvolvedor).findOne(
+            {
+                where: {    
+                    nomedesenvolvedor: desenvolvedor
+                }
+            }
+        )
+
+        if(!dev){
+            throw new Error("este desenvolvedor não existe");
+        }
+
+        const idDev = dev.id;
+
+        const puxarJogosDev = await AppDataSource.getRepository(Jogos).find(
+            {
+                where: {
+                    desenvolvedor: {
+                        id: idDev
+                    }
+                },
+                relations: {
+                    avaliacoes: true,
+                    categoria: true,
+                    desenvolvedor: true
+                }
+            }
+        )
+
+        if(puxarJogosDev.length === 0){
+            throw new Error("Nenhum jogo encontrado");
+        }
+
+        const quantidadeJogos = puxarJogosDev.length;
+        
+        quantityGames = quantidadeJogos;
+        valueReturn = puxarJogosDev;
     }
 
     if(valueReturn.length > 0){

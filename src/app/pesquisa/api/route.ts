@@ -1,13 +1,16 @@
 import { FiltraJogos } from "@/servers/controllers/ControllerJogos";
 
-import { pesquisaRequest } from "@/servers/controllers/ControllerJogos";
-
 export async function POST(req: Request){
     
     try{
         const body = await req.json();
 
-        console.log(body);
+        const {pesquisa, pesquisaCategoria, desenvolvedor, distribuidora, ordemPreco} = body; 
+
+        if(!pesquisa && !pesquisaCategoria &&!desenvolvedor &&!distribuidora && !ordemPreco){
+            throw new Error("Nenhum dado para pesquisar algo");
+        }
+
         //puxa jogos
         const jogos = await FiltraJogos(body);
 

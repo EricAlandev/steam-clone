@@ -16,7 +16,7 @@ export default function EsqJogosGaleria({nome ,foto_jogo, percentual, preco, pre
 
                 {/*Names and categorys */}
                 <div className=" gap-2 ">
-                    <p className="max-w-[130px] mt-1 ml-1.5 text-[14px] text-[white]">{nome}</p>
+                    <p className="min-w-[130px] mt-1 ml-2.5 text-[14px] text-[white]">{nome}</p>
 
                 </div>
 

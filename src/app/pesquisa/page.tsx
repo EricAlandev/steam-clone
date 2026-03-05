@@ -18,6 +18,9 @@ export default  function PagePesquisa(){
     const searchParams = useSearchParams();
     const pesquisa = searchParams.get("pesquisa")
     const pesquisaCategoria = searchParams.get("pesquisaCategoria")
+    const desenvolvedor = searchParams.get("desenvolvedor")
+    const distribuidora = searchParams.get("distribuidora")
+
 
     const Pesquisar = async (precoOrdem? : string) => {
         try{
@@ -29,6 +32,8 @@ export default  function PagePesquisa(){
                 body: JSON.stringify({
                     pesquisa : pesquisa || null,
                     pesquisaCategoria: pesquisaCategoria || null,
+                    desenvolvedor: desenvolvedor || null,
+                    distribuidora: distribuidora || null,
                     ordemPreco: precoOrdem || null
                 })
             });

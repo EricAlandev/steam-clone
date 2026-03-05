@@ -1,9 +1,11 @@
 // /entity/Usuario.ts
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, JoinColumn, ManyToMany, ManyToOne } from "typeorm";
 import type { Comentarios } from "./EntityComentarios";
 import type { Carrinho } from "./carrinho/EntityCarrinho";
 import type{ ComentariosUser } from "./comentarios/EntityComentarioUser";
 import type {Amigos}  from "./amigos/EntityAmigos";
+import { Distribuidora } from "./EntityDistribuira";
+import { SeguidoresJogos } from "./publisher/EntityFollowersDistribuidora";
 
 @Entity("usuarios") // nome da tabela no banco
 export class Usuario {
@@ -49,5 +51,7 @@ export class Usuario {
     @OneToMany("Amigos", (amigo:any) => amigo.usuario2)
     amigo2!: Amigos[];
 
+    @OneToMany("SeguidoresJogos", (segJ: any) => segJ.usuario)
+    distribuidora!: SeguidoresJogos[]
 
 }
