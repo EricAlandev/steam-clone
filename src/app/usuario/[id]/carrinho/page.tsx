@@ -3,6 +3,7 @@
 import EsqCarrinho from "@/componentes/esqueletos/carrinho/EsqCarrinho";
 import { dadosGlobais } from "@/componentes/gerenciaContext/GlobalContext";
 import Layout from "@/componentes/layout/Layout";
+import { AddGameCart, BuyGamesInCart, pullGames, RemoveGamesCart } from "@/servers/services/user/carrinho/ListToBuyService";
 import { jogos } from "@/servers/types/TypeJogos";
 import { useEffect, useState } from "react";
 
@@ -14,6 +15,7 @@ type ArrayJogos = {
 export default function Carrinho(){
      
     const [arrayJogos, setArrayJogos] = useState<ArrayJogos>();
+    const [popUp, setPopUp] = useState<string>();
 
 
     const {usuario, token} = dadosGlobais()!;
@@ -21,18 +23,8 @@ export default function Carrinho(){
     //puxa todos os jogos do Carrinho;
     const puxarJogosCarrinho = async() => {
         try{
-          const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/usuario/${usuario.id}/carrinho/api`, {
-            method: 'GET',
-            headers: {
-                'Content-Type' : 'application/json',
-                'Authorization' : `Bearer ${token}`
-            }
-          })
-
-          const resposta = await response.json();
-          setArrayJogos(resposta);
-
-          console.log(arrayJogos?.valorEstimado)
+          const gamesInTheCart = await pullGames(usuario.id, token);
+          setArrayJogos(gamesInTheCart);
         }
 
         catch(error){
@@ -43,21 +35,13 @@ export default function Carrinho(){
     //POST
     const AdicionarJogoAoCarrinho = async (id: number) => {
       try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/usuario/${usuario?.id}/carrinho/api`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization' : `Bearer ${token}`
-          },
-            body: JSON.stringify({
-            idJogo: id
-          })
-        })
+        
+        const addGame = await AddGameCart(id, usuario.id, token);
 
         await puxarJogosCarrinho();
       }
 
-      catch(error){
+      catch(error){ 
         console.log(error);
       }
      }
@@ -65,13 +49,20 @@ export default function Carrinho(){
     //DELETE
     const deletaJogosDoCarrinho = async(id : number) => {
       try{
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/usuario/${usuario.id}/carrinho/api/?idJogo=${id}`, {
-          method: 'DELETE',
-          headers: {
-              'Content-Type' : 'application/json',
-              'Authorization' : `Bearer ${token}`
-          }
-        });
+        const deleteGame = await RemoveGamesCart(id, usuario?.id, token);
+
+        await puxarJogosCarrinho();
+      }
+
+      catch(error){
+        console.log(error);
+      }
+    }
+
+    //PAY FOR THE GAME
+    const PayForTheGames = async() => {
+      try{
+        const pay = await BuyGamesInCart(usuario?.id, token);
 
         await puxarJogosCarrinho();
       }
@@ -97,6 +88,7 @@ export default function Carrinho(){
                   valorEstimado={arrayJogos?.valorEstimado}
                   adicionar={AdicionarJogoAoCarrinho}
                   deletar={deletaJogosDoCarrinho}
+                  pagar={PayForTheGames}
                 />
             </div>
         </div>

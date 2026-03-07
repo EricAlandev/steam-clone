@@ -126,7 +126,10 @@ export default function HeaderUsuario({
             </div>
 
             {/*nível usuário */}
-            <div className="flex items-center w-[86vw] gap-3 mx-auto">
+            <div 
+                className="flex items-center w-[86vw] gap-3 mx-auto"
+                onClick={() => tipoPopUp("jogos")}
+            >
                 <p className="text-[20px] text-[white]">
                     Nível 
                 </p>
@@ -138,7 +141,7 @@ export default function HeaderUsuario({
                 >  {nivel}
                 </span>
             </div>
-
+                
                 
             {/*YOU - EDIT PROFILE */}
             {estadoAmizade === "Você" && (

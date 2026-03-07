@@ -57,7 +57,7 @@ export default function HeaderDetalheJogos({
 
                         {/*Go to the developer page */}
                         <Link
-                            href={`/pesquisa/${nomedesenvolvedor}`}
+                            href={`/pesquisa?desenvolvedor=${nomedesenvolvedor}`}
                             className=" text-[#45ACFF]"
                         >             
                             {nomedesenvolvedor}

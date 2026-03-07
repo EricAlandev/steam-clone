@@ -5,10 +5,18 @@ type ArrayJogos = {
     jogosCarrinhos?: jogos[],
     valorEstimado? : number,
     adicionar: (id: number) => void,
-    deletar: (id: number) => void
+    deletar: (id: number) => void,
+    pagar: (id: null) => void
 }
 
-export default function EsqCarrinho({jogosCarrinhos, valorEstimado, adicionar, deletar} : ArrayJogos ){
+export default function EsqCarrinho({
+  jogosCarrinhos,
+  valorEstimado, 
+  adicionar, 
+  deletar, 
+  pagar} 
+  : ArrayJogos 
+){
 
     return(
         <div className="w-[85vw] mx-auto ">
@@ -70,6 +78,7 @@ export default function EsqCarrinho({jogosCarrinhos, valorEstimado, adicionar, d
               
               <button
                 className="login_button mt-4"
+                onClick={() => pagar(null)}
                 >
                     Continuar para o pagamento.
               </button>

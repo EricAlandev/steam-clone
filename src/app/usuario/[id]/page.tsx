@@ -2,15 +2,19 @@
 
 'use client'
 import EsqPopUpAmigos from "@/componentes/esqueletos/popUps/EsqPopUpAmigos";
+import EsqPopUpGames from "@/componentes/esqueletos/popUps/EsqPopUpGames";
 import { dadosGlobais } from "@/componentes/gerenciaContext/GlobalContext";
 import Layout from "@/componentes/layout/Layout";
 import PorComentario from "@/componentes/pages/detalheJogos/PorComentario";
 import HeaderUsuario from "@/componentes/pages/UsuarioPage/HeaderUsuario";
 import PorComentariosU from "@/componentes/pages/UsuarioPage/PorComentariosU";
 import RenderComentarios from "@/componentes/pages/UsuarioPage/RenderComentarios";
+import { Jogos } from "@/servers/entitys/EntityJogos";
+import type { UsuarioGames } from "@/servers/entitys/jogosUser/EntityUserGames";
 
 import { adicionarComentariosPerfil, deletarComentarioPerfil } from "@/servers/services/SystemComentsService";
-import { adicionarUserAmizade, deletarAmigo } from "@/servers/services/SystemFriendShipService";
+import { adicionarUserAmizade, deletarAmigo, pulldataOfCliente } from "@/servers/services/SystemFriendShipService";
+import { jogos } from "@/servers/types/TypeJogos";
 import { TypeUsuario } from "@/servers/types/TypeUsuario";
 
 import { useParams } from "next/navigation";
@@ -29,6 +33,12 @@ export type TypeAmigos = {
     usuario2: TypeUsuario
 }
 
+type usuarioJogos = {
+    id: number,
+    jogos: Jogos
+}
+
+
 type retornoState = {
     amigo1: TypeAmigos[],
     amigo2: TypeAmigos[],
@@ -39,7 +49,8 @@ type retornoState = {
     foto_perfil?: string,
     pais?: string,
     descricao?: string,
-    nivel?: number
+    nivel?: number,
+    usuarioJogos?: usuarioJogos[],
 }
 
 export default function PageUsuario(){
@@ -54,18 +65,16 @@ export default function PageUsuario(){
 
     //puxa dados daquele usuário;
     const puxarDadosDoUsuarioClient = async () => {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_BASEURL}/usuario/api/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+        try{
+            const data = await pulldataOfCliente(id);
+            console.log(data);
+            setDadosUsuario(data);
 
-        const resposta = await response.json();
+        }
 
-        setDadosUsuario(resposta);
-
-        console.log(resposta);
+        catch(error){
+            console.log(error);
+        }
     }
 
     //friendships merge
@@ -189,13 +198,21 @@ export default function PageUsuario(){
                             </div>
                         </div>
 
-                        {/*Pop Ups */}
+                        {/*POP UPS */}
                         {tipoPopUp === "Amigos" && (
                             <EsqPopUpAmigos
                                 idUsuarioAtual={id}
                                 nomeUsuario={dadosUsuario?.nome}
                                 closePopUp={() => setTipPopUp(null)}
                                 amigos={amigosDoUser}
+                            />
+                        )}
+
+                        {tipoPopUp === "jogos" && (
+                            <EsqPopUpGames
+                                nomeUsuario={dadosUsuario?.nome}
+                                closePopUp={() => setTipPopUp(null)}
+                                usuarioJogos={dadosUsuario?.usuarioJogos}
                             />
                         )}
                 </div>

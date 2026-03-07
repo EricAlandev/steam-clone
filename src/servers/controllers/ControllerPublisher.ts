@@ -118,6 +118,7 @@ export async function PullGamesPublisher(id: number, categoria: string){
     
     const arrayJogos = jogos.map((j) => {
         const jogoAtual = {
+            id: j?.id,
             nome: j?.nome,
             foto_jogo: j?.foto_jogo,
             preco: ConversorPrecos(j?.preco),

@@ -6,6 +6,7 @@ import type{ ComentariosUser } from "./comentarios/EntityComentarioUser";
 import type {Amigos}  from "./amigos/EntityAmigos";
 import { Distribuidora } from "./EntityDistribuira";
 import { SeguidoresJogos } from "./publisher/EntityFollowersDistribuidora";
+import { UsuarioGames } from "./jogosUser/EntityUserGames";
 
 @Entity("usuarios") // nome da tabela no banco
 export class Usuario {
@@ -51,7 +52,10 @@ export class Usuario {
     @OneToMany("Amigos", (amigo:any) => amigo.usuario2)
     amigo2!: Amigos[];
 
+    @OneToMany("UsuarioGames", (uj: any) => uj.usuarios)
+    usuarioJogos!: UsuarioGames[];
+
     @OneToMany("SeguidoresJogos", (segJ: any) => segJ.usuario)
-    distribuidora!: SeguidoresJogos[]
+    distribuidora!: SeguidoresJogos[];
 
 }

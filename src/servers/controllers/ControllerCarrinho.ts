@@ -4,6 +4,8 @@ import { Carrinho } from "../entitys/carrinho/EntityCarrinho";
 import { Usuario } from "../entitys/EntityUsers";
 import ConversorDate from "@/lib/functions/ConversorDate";
 import { ConversorPrecos } from "@/lib/functions/ConversorValor";
+import { UsuarioGames } from "../entitys/jogosUser/EntityUserGames";
+import { Jogos } from "../entitys/EntityJogos";
 
 type IdsParaCarrinhos = {
     idJogo: number,
@@ -123,14 +125,87 @@ export async function deletar({uid, idJogo} : IdsParaTirarCarrinho){
 
     const idUsuario = usuario?.id;
 
+    const game = await AppDataSource.getRepository(Carrinho).findOne({
+        where: {
+            jogos: {id: idJogo},
+            usuarios: {id: idUsuario}
+        },
+
+        relations: {
+            jogos: true
+        }
+    });
+
+    if(!game){
+        throw new Error("Dosn't exists this game in the cart of t he actual user");
+    }
+
+    const idGame = game?.id;
+
     const deletar = await AppDataSource.getRepository(Carrinho).delete({
-        jogos: {id: idJogo},
-        usuarios: {id: idUsuario}
+        id: idGame
     })
 
     if(deletar.affected === 0){
         throw new Error("Não foi possível remover do carrinho");
     }
+}
 
+//PAY FOR THE GAMES
+
+export const PayForGames = async(uid: string) => {
+
+    const AppDataSource = await getDataSource();
+
+    const usuario = await AppDataSource.getRepository(Usuario).findOne({
+        where: {
+            uid: uid
+        }
+    })
+
+    if(!usuario){
+        throw new Error("User dosn't exists");
+    }
+
+    const idUsuario = usuario?.id;
+
+    const cartGames = await AppDataSource.getRepository(Jogos).find({
+        where: {
+            carrinho: {
+                usuarios: {
+                    id: idUsuario
+                }
+            }
+        },
+        relations: {
+            carrinho: true
+        }
+    });
+
+    if(cartGames.length === 0){
+        throw new Error("Was not found games in the user cart");
+    }
+
+    if(cartGames.length > 0) {
+        
+        //Gonna iterate the array to add all of the games to the user;
+        const jogos = cartGames.forEach(async (c) => {
+            console.log("entered in the forEach");
+            const games = await AppDataSource.getRepository(UsuarioGames).create({
+                jogos: {id: c.id},
+                usuarios: {id: idUsuario}
+            })
+
+            const saveGame = await AppDataSource.getRepository(UsuarioGames).save(games);
+
+            console.log(saveGame)
+        });
+
+        const removeFromCart = await AppDataSource.getRepository(Carrinho).delete({
+                usuarios: {id: idUsuario}
+        });
+    }
+
+    return ({mensagem : "All of the games are added in the library of the user"})
 
 }

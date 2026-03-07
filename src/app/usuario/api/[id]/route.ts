@@ -8,10 +8,11 @@ export async function GET(req: Request, {params} : {params: {id: string}} ){
         const id : string =  parametros?.id;
         const idConvertido = parseInt(id);
 
-        //puxa jogos
-        const jogos = await DadosUsuarios(idConvertido);
+        //pull data and games
+        const data = await DadosUsuarios(idConvertido);
 
-        return new Response(JSON.stringify(jogos), {
+
+        return new Response(JSON.stringify({data}), {
             status: 201,
             headers: {
                 'Content-Type': 'application/json',

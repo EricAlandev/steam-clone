@@ -170,6 +170,9 @@ export async function DadosUsuarios(idConvertido : number){
             amigo2 : {
                 usuario1: true,
                 usuario2: true
+            },
+            usuarioJogos: {
+                jogos: true
             }
         }
     })

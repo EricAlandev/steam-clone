@@ -17,13 +17,15 @@ import { OpcoesTiposJogos } from "@/servers/entitys/opcoes/OpcoesTipoJogos";
 import { SeguidoresJogos } from "@/servers/entitys/publisher/EntityFollowersDistribuidora";
 import { OpcoesTipoPublisher } from "@/servers/entitys/publisher/EntityOpcoesTipos";
 import { PivoOpcoesTiposPublisher } from "@/servers/entitys/publisher/EntityOpcoesTiposPublisher";
+import { UsuarioGames } from "@/servers/entitys/jogosUser/EntityUserGames";
+import WorkerLevel from "@/servers/Workers/WorkerLevel";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.NEXT_PUBLIC_DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos, SeguidoresJogos, OpcoesTipoPublisher, PivoOpcoesTiposPublisher],
+  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos, SeguidoresJogos, OpcoesTipoPublisher, PivoOpcoesTiposPublisher, UsuarioGames],
   migrations: [],
   subscribers: [] 
 });
@@ -32,6 +34,7 @@ export async function getDataSource() {
   if (!AppDataSource.isInitialized) {
     await AppDataSource.initialize();
     WorkerAvaliacao();
+    WorkerLevel();
     console.log("TypeORM inicializado");
   }
   return AppDataSource;
