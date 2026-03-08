@@ -13,6 +13,8 @@ import { ILike } from "typeorm";
 import { TypeUsuario } from "../types/TypeUsuario";
 import { ComentariosUser } from "../entitys/comentarios/EntityComentarioUser";
 import { Amigos } from "../entitys/amigos/EntityAmigos";
+import { Distribuidora } from "../entitys/EntityDistribuira";
+import { Desenvolvedor } from "../entitys/EntityDev";
 
 //types
 type dadosComentario = {
@@ -33,22 +35,69 @@ type proUpdateUser = {
 
 export async function CadastrarUsuario(dados: Dado){
 
-    const {uid, email} = dados;
+    const {uid, email, nome, pais, autorizacao} = dados;
 
     //verifica/inicializa o pool
     const AppDataSource = await getDataSource();
 
-    //cadastra usuário
+    let mensagem: Record<string, string> = {};
+    let letra: string = "";
 
-    const User = AppDataSource.getRepository(Usuario).create({
-        uid: uid,
-        email: email,
-        foto_perfil: "/jogos/distribuidora/wallpaper/WallpaperPadrao.png"
-    })
+    if(autorizacao === "client" || autorizacao === "dev"){
+        //cadastra usuário
+        const User = AppDataSource.getRepository(Usuario).create({
+            uid: uid,
+            email: email,
+            foto_perfil: "/jogos/distribuidora/wallpaper/WallpaperPadrao.png",
+            descricao: "novo aqui!",
+            pais: pais,
+            nome: nome,
+            nivel: 1
+        })
 
-    const criarUser = await AppDataSource.getRepository(Usuario).save(User);
+        const criarUser = await AppDataSource.getRepository(Usuario).save(User);
 
-    const mensagem = "usuário cadastrado"
+        if(!criarUser){
+            throw new Error("Falha ao criar o usuário");
+        }
+
+        letra = "usuário criado"
+        mensagem.cliente = letra;
+    }
+
+    if(autorizacao === "publisher"){
+        const publisher = await AppDataSource.getRepository(Distribuidora).create({
+            capa: "/jogos/distribuidora/capa/Capa2.jpg",
+            fundo: "/jogos/distribuidora/wallpaper/WallpaperPadrao.png",
+            nome_distribuidora: nome,
+            seguidores: 0
+        })
+
+        const criado = await AppDataSource.getRepository(Distribuidora).save(publisher);
+
+        if(!criado){
+            throw new Error("erro ao criar o publisher");
+        }
+
+        letra = "publisher criado"
+        mensagem.cliente = letra;
+    }
+
+    if(autorizacao === "dev"){
+        //Create the developer
+        const desenvolvedor = await AppDataSource.getRepository(Desenvolvedor).create({
+            nomedesenvolvedor: nome
+        })
+
+        const dev = await AppDataSource.getRepository(Desenvolvedor).save(desenvolvedor);
+
+        if(!dev){
+            throw new Error("erro ao criar o desenvolvedor");
+        }
+        
+        letra = "dev criado"
+        mensagem.cliente = letra;
+    }
 
     return mensagem;
 }
@@ -193,7 +242,7 @@ export async function AlterarDadosUsers(bodyFormado: TypeUsuario){
 
     const {uid, nome, foto_perfil, descricao, pais} = bodyFormado;
 
-    const AppDataSource = await getDataSource();
+    const AppDataSource = await getDataSozurce();
 
     const valores: Partial<proUpdateUser> = {};
 

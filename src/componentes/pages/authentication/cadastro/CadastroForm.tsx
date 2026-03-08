@@ -5,9 +5,12 @@ import { useState } from "react"
 
     //type dado
     export type Dado = {
+        autorizacao: string,
         uid?: string,
+        nome: string,
         email: string,
-        senha: string
+        senha: string,
+        pais: string
     }
     
     //define os dados enviados com um return void
@@ -20,10 +23,16 @@ export default function CadastroForm({dadosCadastro}: DadoCadastro){
 
 
     //define o dado específico
-    const [dados, setDados] = useState<Dado>({email: "", senha: ""});
+    const [dados, setDados] = useState<Dado>({
+        autorizacao: "",
+        nome: "",
+        email: "", 
+        senha: "",
+        pais: ""
+    });
 
     //Pega os values dos inputs
-    const PegaValues = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const PegaValues = async (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const {name, value} = e.target;
 
         setDados((dado) =>  (
@@ -50,6 +59,78 @@ export default function CadastroForm({dadosCadastro}: DadoCadastro){
                 }}
                 className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] mx-auto"
                 >
+                    <label htmlFor="nome"
+                    className="block mt-4 font-bold uppercase text-[#A0A0A0]">
+                        Nome
+                    </label>
+
+                    {/*Nome */}
+                    <input
+                        type="nome"
+                        id="nome"
+                        name="nome"
+                        value={dados.nome}
+                        onChange={PegaValues}
+                        className="w-full mt-1.5 p-2.5 bg-[#393C44] rounded-[8px] text-[white]"
+                    />
+
+                    {/*Select Country */}
+                    <label htmlFor="pais"
+                    className="block mt-4 font-bold uppercase text-[#A0A0A0]">
+                        País
+                    </label>
+
+                    <select 
+                    name="pais" 
+                    id="pais"
+                    value={dados?.pais}
+                    onChange={PegaValues}
+                    className="w-full mt-1.5 p-2.5 bg-[#393C44] rounded-[8px] text-[white]"
+                    >
+                        <option
+                          value={"Brasil"}
+                        >
+                            Brasil
+                        </option>
+
+                        <option
+                          value={"USA"}
+                        >
+                            USA
+                        </option>
+                    </select>
+
+                {/*Select Authorization */}
+                <label htmlFor="autorizacao"
+                    className="block mt-4 font-bold uppercase text-[#A0A0A0]">
+                        Autorização
+                    </label>
+
+                <select 
+                    name="autorizacao" 
+                    id="autorizacao"
+                    value={dados?.pais}
+                    onChange={PegaValues}
+                    className="w-full mt-1.5 p-2.5 bg-[#393C44] rounded-[8px] text-[white]"
+                >
+                        <option
+                          value={"dev"}
+                        >
+                            Desenvolvedor
+                        </option>
+
+                        <option
+                          value={"publisher"}
+                        >
+                            Distribuidora
+                        </option>
+
+                        <option
+                          value={"client"}
+                        >
+                            Comprador
+                        </option>
+                </select>
 
                     <label htmlFor="email"
                     className="block mt-4 font-bold uppercase text-[#1879FF]">

@@ -19,13 +19,15 @@ import { OpcoesTipoPublisher } from "@/servers/entitys/publisher/EntityOpcoesTip
 import { PivoOpcoesTiposPublisher } from "@/servers/entitys/publisher/EntityOpcoesTiposPublisher";
 import { UsuarioGames } from "@/servers/entitys/jogosUser/EntityUserGames";
 import WorkerLevel from "@/servers/Workers/WorkerLevel";
+import { Autorizacoes } from "@/servers/entitys/autorizacoes/EntityAutorizacao";
+import { RelacaoAutorizacao } from "@/servers/entitys/autorizacoes/EntityRelacaoAutorizacao";
 
 export const AppDataSource = new DataSource({
   type: "postgres",
   url: process.env.NEXT_PUBLIC_DATABASE_URL,
   synchronize: false,
   logging: false,
-  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos, SeguidoresJogos, OpcoesTipoPublisher, PivoOpcoesTiposPublisher, UsuarioGames],
+  entities: [Usuario, Jogos, Distribuidora, Desenvolvedor, Categoria, SlidesJogos, Comentarios, Avaliacoes, Carrinho, ComentariosUser, Amigos, OpcoesTiposJogos, SeguidoresJogos, OpcoesTipoPublisher, PivoOpcoesTiposPublisher, UsuarioGames, Autorizacoes, RelacaoAutorizacao],
   migrations: [],
   subscribers: [] 
 });

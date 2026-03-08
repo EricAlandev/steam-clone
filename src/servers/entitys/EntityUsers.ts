@@ -7,6 +7,7 @@ import type {Amigos}  from "./amigos/EntityAmigos";
 import { Distribuidora } from "./EntityDistribuira";
 import { SeguidoresJogos } from "./publisher/EntityFollowersDistribuidora";
 import { UsuarioGames } from "./jogosUser/EntityUserGames";
+import { RelacaoAutorizacao } from "./autorizacoes/EntityRelacaoAutorizacao";
 
 @Entity("usuarios") // nome da tabela no banco
 export class Usuario {
@@ -33,6 +34,9 @@ export class Usuario {
 
     @Column()
     nivel!: number;
+
+    @OneToMany("RelacaoAutorizacao", (RN: any) => RN.usuario)
+    relacaoAutorizacaoUser!: RelacaoAutorizacao[];
 
     @OneToMany("Comentarios", (comentario:any) => comentario.usuario)
     comentario!: Comentarios;

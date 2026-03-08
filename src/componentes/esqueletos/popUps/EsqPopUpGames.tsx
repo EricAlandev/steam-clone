@@ -24,7 +24,7 @@ export default function EsqPopUpGames(
     console.log("jogos do usuario", usuarioJogos)
     
     return(
-        <>
+        <div>
             {/*Overlay */}
             <div className="fixed inset-0 bg-[black] opacity-70"></div>
 
@@ -57,7 +57,7 @@ export default function EsqPopUpGames(
                         return(
                             <Link key={j.id}
                         href={`/jogos/${j.id}`}
-                         className="flex items-center gap-4"
+                         className="flex items-center gap-4 pb-3 border-b-[0.5px] border-[#A0A0A0]"
                         >
                             <img
                                 src={j.jogos?.foto_jogo}
@@ -72,6 +72,6 @@ export default function EsqPopUpGames(
                     })}
                 </div>
             </div>
-        </>
+        </div>
     )
 }

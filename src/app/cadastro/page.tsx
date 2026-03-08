@@ -26,7 +26,10 @@ export default function PageCadastro(){
                 },
                 body: JSON.stringify({
                     uid: uid,
-                    email: dados.email
+                    nome: dados.nome,
+                    pais: dados.pais,
+                    email: dados.email,
+                    autorizacao: dados.autorizacao
                 })
             });
 
